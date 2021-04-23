@@ -19,6 +19,7 @@ namespace MySchool.Data
         public DbSet<Parent> Parents { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<PermissionSlip> PermissionSlips { get; set; }
+        public DbSet<EmergencyCard> EmergencyCards { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

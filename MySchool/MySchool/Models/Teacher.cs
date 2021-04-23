@@ -11,7 +11,7 @@ namespace MySchool.Models
     public class Teacher
     {
         [Key]
-        public int Id { get; set; }
+        public int TeacherId { get; set; }
 
         [Display(Name = "First Name")]
         public string FirstName { get; set; }

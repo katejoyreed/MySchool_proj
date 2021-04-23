@@ -16,6 +16,7 @@ namespace MySchool.Data
         }
 
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<Parent> Parents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -18,6 +18,7 @@ namespace MySchool.Data
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Parent> Parents { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<PermissionSlip> PermissionSlips { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

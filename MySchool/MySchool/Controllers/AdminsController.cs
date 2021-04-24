@@ -25,8 +25,13 @@ namespace MySchool.Controllers
         // GET: Admins
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Admins.Include(a => a.IdentityUser);
-            return View(await applicationDbContext.ToListAsync());
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var admin = _context.Admins.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            if (admin == null)
+            {
+                return View("Create");
+            }
+            return View();
         }
 
         // GET: Admins/Details/5

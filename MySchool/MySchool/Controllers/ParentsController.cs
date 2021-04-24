@@ -25,8 +25,14 @@ namespace MySchool.Controllers
         // GET: Parents
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Parents.Include(p => p.IdentityUser);
-            return View(await applicationDbContext.ToListAsync());
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            if (parent == null)
+            {
+                return View("Create");
+            }
+            
+            return View();
         }
 
         // GET: Parents/Details/5

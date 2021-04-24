@@ -25,7 +25,12 @@ namespace MySchool.Controllers
         // GET: Teachers
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Teachers.Include(t => t.IdentityUser);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            if (teacher == null)
+            {
+                return View("Create");
+            }
             return View(await applicationDbContext.ToListAsync());
         }
 

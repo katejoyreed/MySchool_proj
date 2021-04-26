@@ -31,7 +31,8 @@ namespace MySchool.Controllers
             {
                 return View("Create");
             }
-            return View();
+            var classList = _context.Classrooms.ToList();
+            return View(classList);
         }
 
         // GET: Admins/Details/5

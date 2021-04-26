@@ -117,6 +117,18 @@ namespace MySchool.Controllers
             return View(students);
         }
 
+        //Get EmergencyCard
+        public IActionResult SeeEmergencyCard(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var emergencyCard = _context.EmergencyCards.Where(x => x.StudentId == id);
+            return View(emergencyCard);
+        }
+
         // GET: Admins/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

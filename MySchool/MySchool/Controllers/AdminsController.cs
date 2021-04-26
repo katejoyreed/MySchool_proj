@@ -75,7 +75,7 @@ namespace MySchool.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            
+
             return View("Index");
         }
         [HttpPost]
@@ -127,6 +127,17 @@ namespace MySchool.Controllers
 
             var emergencyCard = _context.EmergencyCards.Where(x => x.StudentId == id);
             return View(emergencyCard);
+        }
+
+        public IActionResult CreatePermissionSlip([Bind("Id,Date,Location,Time,Classroom,StudentName,ApprovingParent")]PermissionSlip slip)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(slip);
+                _context.SaveChangesAsync();
+                return View("Index");
+            }
+            return View("Index");
         }
 
         // GET: Admins/Edit/5

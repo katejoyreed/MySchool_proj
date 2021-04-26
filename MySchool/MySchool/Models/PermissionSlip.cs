@@ -13,6 +13,7 @@ namespace MySchool.Models
         public DateTime Date { get; set; }
         public string Location { get; set; }
         public string Time { get; set; }
+        public string Classroom { get; set; }
         
         [Display(Name = "Student Name")]
         public string? StudentName { get; set; }

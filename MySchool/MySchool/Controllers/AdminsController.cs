@@ -90,6 +90,19 @@ namespace MySchool.Controllers
             return View("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateClassroom([Bind("ClassId,ClassName")] Classroom classroom)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(classroom);
+                _context.SaveChangesAsync();
+                return View("Index");
+            }
+            return View("Index");
+        }
+
         // GET: Admins/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

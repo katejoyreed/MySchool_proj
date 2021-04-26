@@ -77,6 +77,18 @@ namespace MySchool.Controllers
             
             return View("Index");
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddStudent([Bind("StudentId,StudentName,Classroom")] Student student)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(student);
+                _context.SaveChangesAsync();
+                return View("Index");
+            }
+            return View("Index");
+        }
 
         // GET: Admins/Edit/5
         public async Task<IActionResult> Edit(int? id)

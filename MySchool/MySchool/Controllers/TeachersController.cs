@@ -31,7 +31,7 @@ namespace MySchool.Controllers
             {
                 return View("Create");
             }
-            return View(await applicationDbContext.ToListAsync());
+            return View();
         }
 
         // GET: Teachers/Details/5

@@ -13,5 +13,7 @@ namespace MySchool.Models
 
         [Display(Name = "Class Name")]
         public string ClassName { get; set; }
+
+        
     }
 }

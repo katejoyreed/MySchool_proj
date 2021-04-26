@@ -23,7 +23,7 @@ namespace MySchool.Controllers
         }
 
         // GET: Admins
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var admin = _context.Admins.Where(c => c.IdentityUserId == userId).FirstOrDefault();
@@ -102,6 +102,19 @@ namespace MySchool.Controllers
                 return View("Index");
             }
             return View("Index");
+        }
+
+        //Get ClassList
+        public IActionResult SeeStudents(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var classroom = _context.Classrooms.Where(x => x.ClassId == id).FirstOrDefault();
+            var students = _context.Students.Where(x => x.Classroom == classroom.ClassName).ToList();
+            return View(students);
         }
 
         // GET: Admins/Edit/5

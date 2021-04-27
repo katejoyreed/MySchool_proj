@@ -31,8 +31,9 @@ namespace MySchool.Controllers
             {
                 return View("Create");
             }
+            var classPosts = _context.Posts.Where(x => x.Classroom.ClassName == parent.Classroom).ToList();
             
-            return View();
+            return View(classPosts);
         }
 
         // GET: Parents/Details/5

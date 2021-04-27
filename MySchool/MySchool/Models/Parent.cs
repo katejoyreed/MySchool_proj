@@ -29,6 +29,8 @@ namespace MySchool.Models
         
         public string Address { get; set; }
 
+        public string Classroom { get; set; }
+
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }

@@ -31,6 +31,7 @@ namespace MySchool.Models
 
         public string Classroom { get; set; }
 
+
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }

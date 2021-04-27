@@ -12,7 +12,7 @@ namespace MySchool.Models
         [Key]
         public int Id { get; set; }
 
-        [Display(Name = "Student Name")]
+        [Display(Name = "Student First Name")]
         public string StudentName { get; set; }
 
         [Display(Name = "Parent 1 Name")]

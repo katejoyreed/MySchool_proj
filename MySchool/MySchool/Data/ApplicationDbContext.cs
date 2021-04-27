@@ -22,7 +22,6 @@ namespace MySchool.Data
         public DbSet<EmergencyCard> EmergencyCards { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Classroom> Classrooms { get; set; }
-
         public DbSet<Post> Posts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

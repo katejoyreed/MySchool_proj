@@ -31,6 +31,7 @@ namespace MySchool.Controllers
             {
                 return View("Create");
             }
+            var classPosts = _context.Posts.Where(x => x.Classroom.ClassName == teacher.Classroom);
             return View();
         }
 

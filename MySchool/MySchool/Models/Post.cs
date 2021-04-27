@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,5 +15,9 @@ namespace MySchool.Models
         public string Text { get; set; }
 
         public List<string>? Comments { get; set; }
+
+        [ForeignKey("Classroom")]
+        public int ClassId { get; set; }
+        public Classroom Classroom { get; set; }
     }
 }

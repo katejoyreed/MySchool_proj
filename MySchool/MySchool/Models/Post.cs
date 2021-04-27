@@ -14,7 +14,7 @@ namespace MySchool.Models
 
         public string Text { get; set; }
 
-        public List<string>? Comments { get; set; }
+        public string Author { get; set; }
 
         [ForeignKey("Classroom")]
         public int ClassId { get; set; }

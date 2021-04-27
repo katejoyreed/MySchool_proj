@@ -34,7 +34,13 @@ namespace MySchool.Controllers
             var classPosts = _context.Posts.Where(x => x.Classroom.ClassName == teacher.Classroom);
             return View();
         }
-
+        public IActionResult MyStudents()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            var myStudents = _context.Students.Where(x => x.Classroom == teacher.Classroom);
+            return View(myStudents);
+        }
         // GET: Teachers/Details/5
         public async Task<IActionResult> Details(int? id)
         {

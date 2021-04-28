@@ -114,6 +114,13 @@ namespace MySchool.Controllers
             _context.SaveChangesAsync();
             return View(permissionSlip);
         }
+        public IActionResult ViewPermissionSlips()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            var slips = _context.PermissionSlips.Where(x => x.Classroom == parent.Classroom).ToList();
+            return View(slips);
+        }
 
         // GET: Parents/Edit/5
         public async Task<IActionResult> Edit(int? id)

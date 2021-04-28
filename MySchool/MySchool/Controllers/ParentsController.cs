@@ -79,6 +79,41 @@ namespace MySchool.Controllers
             
             return View("Index");
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateEmergencyCard([Bind("Id,StudentName,ParentOneName,ParentOneContact,ParentTwoName,ParentTwoContact,ECOneName,ECOneNumber,ECTwoName,ECTwoNumber,DocName,Allergies,StudentId,Student")] EmergencyCard card)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(card);
+                _context.SaveChangesAsync();
+                return View("Index");
+            }
+            return View("Index");
+        }
+        //Get Permission Slip
+        public IActionResult FillPermissionSlip(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var slip = _context.PermissionSlips.Find(id);
+            return View(slip);
+        }
+
+        public IActionResult FillPermissionSlip(int id, [Bind("Id,Date,Location,Time,Classroom,StudentName,ApprovingParent")]PermissionSlip permissionSlip)
+        {
+            var slip = _context.PermissionSlips.Where(x => x.Id == id).FirstOrDefault();
+            permissionSlip.Id = slip.Id;
+            permissionSlip.Date = slip.Date;
+            permissionSlip.Location = slip.Location;
+            permissionSlip.Time = slip.Time;
+            permissionSlip.Classroom = slip.Classroom;
+            _context.Update(permissionSlip);
+            _context.SaveChangesAsync();
+            return View(permissionSlip);
+        }
 
         // GET: Parents/Edit/5
         public async Task<IActionResult> Edit(int? id)

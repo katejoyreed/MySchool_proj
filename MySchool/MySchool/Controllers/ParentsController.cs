@@ -32,7 +32,7 @@ namespace MySchool.Controllers
                 return View("Create");
             }
             var classPosts = _context.Posts.Where(x => x.Classroom.ClassName == parent.Classroom).ToList();
-            
+
             return View(classPosts);
         }
 
@@ -76,7 +76,7 @@ namespace MySchool.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            
+
             return View("Index");
         }
         [HttpPost]
@@ -102,7 +102,7 @@ namespace MySchool.Controllers
             return View(slip);
         }
 
-        public IActionResult FillPermissionSlip(int id, [Bind("Id,Date,Location,Time,Classroom,StudentName,ApprovingParent")]PermissionSlip permissionSlip)
+        public IActionResult FillPermissionSlip(int id, [Bind("Id,Date,Location,Time,Classroom,StudentName,ApprovingParent")] PermissionSlip permissionSlip)
         {
             var slip = _context.PermissionSlips.Where(x => x.Id == id).FirstOrDefault();
             permissionSlip.Id = slip.Id;
@@ -121,6 +121,23 @@ namespace MySchool.Controllers
             var slips = _context.PermissionSlips.Where(x => x.Classroom == parent.Classroom).ToList();
             return View(slips);
         }
+        //Get Emergency Card
+        public IActionResult UpdateEmergencyCard(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var card = _context.EmergencyCards.Find(id);
+            return View(card);
+        }
+        public IActionResult UpdateEmergencyCard(int id, [Bind("Id,StudentName,ParentOneName,ParentOneContact,ParentTwoName,ParentTwoContact,ECOneName,ECOneNumber,ECTwoName,ECTwoNumber,DocName,Allergies,StudentId,Student")] EmergencyCard card)
+        {
+            _context.Update(card);
+            _context.SaveChangesAsync();
+            return View(card);
+        }
+        
 
         // GET: Parents/Edit/5
         public async Task<IActionResult> Edit(int? id)

@@ -92,10 +92,9 @@ namespace MySchool.Controllers
             {
                 student.Classroom = classroom.ClassName;
                 _context.Add(student);
-                classroom.Students.Add(student);
                 _context.SaveChangesAsync();
-                return View("Index");
             }
+            
             return View("Index");
         }
 
@@ -113,7 +112,7 @@ namespace MySchool.Controllers
             {
                 _context.Add(classroom);
                 _context.SaveChangesAsync();
-                return View("Index");
+                
             }
             return View("Index");
         }
@@ -127,7 +126,7 @@ namespace MySchool.Controllers
             }
 
             var classroom = _context.Classrooms.Where(x => x.ClassId == id).FirstOrDefault();
-            var students = classroom.Students;
+            var students = _context.Students.Where(x => x.Classroom == classroom.ClassName).ToList();
             return View(students);
         }
 
@@ -140,6 +139,10 @@ namespace MySchool.Controllers
             }
 
             var emergencyCard = _context.EmergencyCards.Where(x => x.StudentId == id);
+            if (emergencyCard == null)
+            {
+                return View("This form has not been completed");
+            }
             return View(emergencyCard);
         }
 
@@ -149,7 +152,7 @@ namespace MySchool.Controllers
             {
                 _context.Add(slip);
                 _context.SaveChangesAsync();
-                return View("Index");
+                
             }
             return View("Index");
         }

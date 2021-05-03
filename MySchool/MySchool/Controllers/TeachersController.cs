@@ -23,7 +23,7 @@ namespace MySchool.Controllers
         }
 
         // GET: Teachers
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
@@ -32,7 +32,7 @@ namespace MySchool.Controllers
                 return View("Create");
             }
             var classPosts = _context.Posts.Where(x => x.Classroom.ClassName == teacher.Classroom);
-            return View();
+            return View(classPosts);
         }
         public IActionResult MyStudents()
         {
@@ -81,8 +81,29 @@ namespace MySchool.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            
+
             return View("Index");
+        }
+        //Get Post
+        public IActionResult CreatePost()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreatePost([Bind("PostId,Text,Author,ClassId,Classroom")] Post post)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+                var classroom = _context.Classrooms.Where(x => x.ClassName == teacher.Classroom).FirstOrDefault();
+                post.Author = teacher.FirstName + teacher.LastName;
+                post.ClassId = classroom.ClassId;
+                post.Classroom = classroom;
+                _context.Add(post);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Index");
         }
 
         // GET: Teachers/Edit/5

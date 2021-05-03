@@ -92,10 +92,10 @@ namespace MySchool.Controllers
             {
                 student.Classroom = classroom.ClassName;
                 _context.Add(student);
-                _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
         //Get Classroom
@@ -111,10 +111,10 @@ namespace MySchool.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(classroom);
-                _context.SaveChangesAsync();
+                _context.SaveChanges();
                 
             }
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
         //Get ClassList
@@ -139,19 +139,20 @@ namespace MySchool.Controllers
             }
 
             var emergencyCard = _context.EmergencyCards.Where(x => x.StudentId == id);
-            if (emergencyCard == null)
-            {
-                return View("This form has not been completed");
-            }
-            return View(emergencyCard);
+                return View(emergencyCard);
         }
-
+        //Get PermissionSlip
+        public IActionResult CreatePermissionSlip()
+        {
+            return View();
+        }
+        [HttpPost]
         public IActionResult CreatePermissionSlip([Bind("Id,Date,Location,Time,Classroom,StudentName,ApprovingParent")]PermissionSlip slip)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(slip);
-                _context.SaveChangesAsync();
+                _context.SaveChanges();
                 
             }
             return View("Index");

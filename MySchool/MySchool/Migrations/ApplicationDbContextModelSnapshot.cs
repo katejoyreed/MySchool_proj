@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MySchool.Data;
 
-namespace MySchool.Data.Migrations
+namespace MySchool.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -48,22 +48,22 @@ namespace MySchool.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "15d7b5d6-73a4-4ec7-9c66-0d3a26a04ffe",
-                            ConcurrencyStamp = "d0405175-4e40-4a2c-89a7-0e5b00510480",
+                            Id = "7054f81b-74af-470c-90a3-d83cadef5894",
+                            ConcurrencyStamp = "b575f2c7-3016-4b8a-9878-3261ed0ffc25",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "5704bee3-05c7-40cb-82e6-1b737d3bc1aa",
-                            ConcurrencyStamp = "10f18320-6e9d-4bf5-8f54-a8e7b67640db",
+                            Id = "3dc8a3d0-45ae-4623-8435-39c8ee827a3d",
+                            ConcurrencyStamp = "e6f1923c-dd5e-4da2-8b1a-a58fc8cb8d9c",
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         },
                         new
                         {
-                            Id = "e4be1158-aa0e-491a-928e-3bc9e0792684",
-                            ConcurrencyStamp = "0188f7bc-b665-4bc2-bdaa-637ea28a19ba",
+                            Id = "71d45ad9-feb4-4f4f-a78b-5fa46f52da3e",
+                            ConcurrencyStamp = "2bd4edbd-a0f9-4172-a059-7dce5693c5f4",
                             Name = "Parent",
                             NormalizedName = "PARENT"
                         });
@@ -185,12 +185,10 @@ namespace MySchool.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -227,12 +225,10 @@ namespace MySchool.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -266,6 +262,21 @@ namespace MySchool.Data.Migrations
                     b.HasIndex("IdentityUserId");
 
                     b.ToTable("Admins");
+                });
+
+            modelBuilder.Entity("MySchool.Models.Classroom", b =>
+                {
+                    b.Property<int>("ClassId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClassName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ClassId");
+
+                    b.ToTable("Classrooms");
                 });
 
             modelBuilder.Entity("MySchool.Models.EmergencyCard", b =>
@@ -328,6 +339,9 @@ namespace MySchool.Data.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Classroom")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -363,6 +377,9 @@ namespace MySchool.Data.Migrations
                     b.Property<string>("ApprovingParent")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Classroom")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -380,6 +397,50 @@ namespace MySchool.Data.Migrations
                     b.ToTable("PermissionSlips");
                 });
 
+            modelBuilder.Entity("MySchool.Models.Post", b =>
+                {
+                    b.Property<int>("PostId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Author")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClassId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PostId");
+
+                    b.HasIndex("ClassId");
+
+                    b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("MySchool.Models.SchedulerEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SchedulerEvents");
+                });
+
             modelBuilder.Entity("MySchool.Models.Student", b =>
                 {
                     b.Property<int>("StudentId")
@@ -387,15 +448,13 @@ namespace MySchool.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Classroom")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("StudentName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
-
                     b.HasKey("StudentId");
-
-                    b.HasIndex("TeacherId");
 
                     b.ToTable("Students");
                 });
@@ -512,15 +571,15 @@ namespace MySchool.Data.Migrations
                     b.Navigation("IdentityUser");
                 });
 
-            modelBuilder.Entity("MySchool.Models.Student", b =>
+            modelBuilder.Entity("MySchool.Models.Post", b =>
                 {
-                    b.HasOne("MySchool.Models.Teacher", "Teacher")
+                    b.HasOne("MySchool.Models.Classroom", "Classroom")
                         .WithMany()
-                        .HasForeignKey("TeacherId")
+                        .HasForeignKey("ClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Teacher");
+                    b.Navigation("Classroom");
                 });
 
             modelBuilder.Entity("MySchool.Models.Teacher", b =>

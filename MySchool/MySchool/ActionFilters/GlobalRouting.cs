@@ -18,7 +18,7 @@ namespace MySchool.ActionFilters
         }
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void OnActionExecuting(ActionExecutingContext context)
@@ -28,15 +28,15 @@ namespace MySchool.ActionFilters
             {
                 if(_claimsPrincipal.IsInRole("Admin"))
                 {
-                    context.Result = new RedirectToActionResult("Index", "Admin", null);
+                    context.Result = new RedirectToActionResult("Index", "Admins", null);
                 }
                 else if (_claimsPrincipal.IsInRole("Parent"))
                 {
-                    context.Result = new RedirectToActionResult("Index", "Parent", null);
+                    context.Result = new RedirectToActionResult("Index", "Parents", null);
                 }
-                else if (_claimsPrincipal.IsInRole("Parent"))
+                else if (_claimsPrincipal.IsInRole("Teacher"))
                 {
-                    context.Result = new RedirectToActionResult("Index", "Teacher", null);
+                    context.Result = new RedirectToActionResult("Index", "Teachers", null);
                 }
             }
         }

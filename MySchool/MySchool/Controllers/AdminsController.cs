@@ -57,7 +57,7 @@ namespace MySchool.Controllers
         // GET: Admins/Create
         public IActionResult Create()
         {
-           // ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -89,6 +89,12 @@ namespace MySchool.Controllers
                 return View("Index");
             }
             return View("Index");
+        }
+
+        //Get Classroom
+        public IActionResult CreateClassroom()
+        {
+            return View();
         }
 
         [HttpPost]
@@ -140,7 +146,7 @@ namespace MySchool.Controllers
             return View("Index");
         }
 
-        public IActionResult ViewData(string cohort, string classroom)
+        public IActionResult Data(string cohort, string classroom)
         {
             List<string> cohorts = new List<string> { "Parents", "Teachers", "Students" };
             List<string> classrooms = _context.Classrooms.Select(x => x.ClassName).Distinct().ToList();

@@ -33,18 +33,24 @@ namespace MySchool.Data
                 .HasData(
                     new IdentityRole
                     {
+                        Id = "7054f81b-74af-470c-90a3-d83cadef5894",
                         Name = "Admin",
-                        NormalizedName = "ADMIN"
+                        NormalizedName = "ADMIN",
+                        ConcurrencyStamp = "b575f2c7-3016-4b8a-9878-3261ed0ffc25"
                     },
                     new IdentityRole
                     {
+                        Id = "3dc8a3d0-45ae-4623-8435-39c8ee827a3d",
                         Name = "Teacher",
-                        NormalizedName = "TEACHER"
+                        NormalizedName = "TEACHER",
+                        ConcurrencyStamp = "e6f1923c-dd5e-4da2-8b1a-a58fc8cb8d9c"
                     },
                     new IdentityRole
                     {
+                        Id = "71d45ad9-feb4-4f4f-a78b-5fa46f52da3e",
                         Name = "Parent",
-                        NormalizedName = "PARENT"
+                        NormalizedName = "PARENT",
+                        ConcurrencyStamp = "2bd4edbd-a0f9-4172-a059-7dce5693c5f4"
                     }
                 );
         }

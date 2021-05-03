@@ -78,13 +78,21 @@ namespace MySchool.Controllers
 
             return View("Index");
         }
+        //Get Student
+        public IActionResult AddStudent(int? id)
+        {
+            return View();
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddStudent([Bind("StudentId,StudentName,Classroom")] Student student)
+        public IActionResult AddStudent(int id, [Bind("StudentId,StudentName,Classroom")] Student student)
         {
+            var classroom = _context.Classrooms.Where(x => x.ClassId == id).FirstOrDefault();
             if (ModelState.IsValid)
             {
+                student.Classroom = classroom.ClassName;
                 _context.Add(student);
+                classroom.Students.Add(student);
                 _context.SaveChangesAsync();
                 return View("Index");
             }
@@ -119,7 +127,7 @@ namespace MySchool.Controllers
             }
 
             var classroom = _context.Classrooms.Where(x => x.ClassId == id).FirstOrDefault();
-            var students = _context.Students.Where(x => x.Classroom == classroom.ClassName).ToList();
+            var students = classroom.Students;
             return View(students);
         }
 

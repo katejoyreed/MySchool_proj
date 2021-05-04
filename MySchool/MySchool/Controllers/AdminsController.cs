@@ -244,6 +244,47 @@ namespace MySchool.Controllers
             }
             return View();
         }
+        public IActionResult EmailAllParents()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult EmailAllParents(string subject, string message)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var admin = _context.Admins.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            MailMessage mailMessage = new MailMessage();
+            var parentEmails = _context.Parents.Select(x => x.Email).ToList();
+            if (ModelState.IsValid)
+            {
+                var senderEmail = new MailAddress(admin.Email);
+                
+                var password = admin.Password;
+                var sub = subject;
+                var body = message;
+                foreach (var email in parentEmails)
+                {
+                    mailMessage.To.Add(email);
+                }
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(senderEmail.Address, password)
+                };
+                foreach(var email in parentEmails)
+                {
+                    var receiverEmail = new MailAddress(email);
+                    using (var mess = new MailMessage(senderEmail, receiverEmail) { Subject = subject, Body = body }) { smtp.Send(mess); }
+                }
+                
+                return View();
+            }
+            return View();
+        }
 
         // GET: Admins/Edit/5
         public async Task<IActionResult> Edit(int? id)

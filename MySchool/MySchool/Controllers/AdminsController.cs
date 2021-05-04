@@ -262,10 +262,7 @@ namespace MySchool.Controllers
                 var password = admin.Password;
                 var sub = subject;
                 var body = message;
-                foreach (var email in parentEmails)
-                {
-                    mailMessage.To.Add(email);
-                }
+                
                 var smtp = new SmtpClient
                 {
                     Host = "smtp.gmail.com",
@@ -281,6 +278,81 @@ namespace MySchool.Controllers
                     using (var mess = new MailMessage(senderEmail, receiverEmail) { Subject = subject, Body = body }) { smtp.Send(mess); }
                 }
                 
+                return View();
+            }
+            return View();
+        }
+
+        public IActionResult SendThisTeacherEmail(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var teacherUser = _context.Teachers.Find(id);
+            return View(teacherUser);
+        }
+        [HttpPost]
+        public IActionResult SendThisTeacherEmail(int id, string subject, string message)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var admin = _context.Admins.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            var teacherUser = _context.Teachers.Find(id);
+            if (ModelState.IsValid)
+            {
+                var senderEmail = new MailAddress(admin.Email);
+                var receiverEmail = new MailAddress(teacherUser.Email);
+                var password = admin.Password;
+                var sub = subject;
+                var body = message;
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(senderEmail.Address, password)
+                };
+                using (var mess = new MailMessage(senderEmail, receiverEmail) { Subject = subject, Body = body }) { smtp.Send(mess); }
+                return View();
+            }
+            return View();
+        }
+        public IActionResult EmailAllTeachers()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult EmailAllTeachers(string subject, string message)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var admin = _context.Admins.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            MailMessage mailMessage = new MailMessage();
+            var teacherEmails = _context.Teachers.Select(x => x.Email).ToList();
+            if (ModelState.IsValid)
+            {
+                var senderEmail = new MailAddress(admin.Email);
+
+                var password = admin.Password;
+                var sub = subject;
+                var body = message;
+                
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(senderEmail.Address, password)
+                };
+                foreach (var email in teacherEmails)
+                {
+                    var receiverEmail = new MailAddress(email);
+                    using (var mess = new MailMessage(senderEmail, receiverEmail) { Subject = subject, Body = body }) { smtp.Send(mess); }
+                }
+
                 return View();
             }
             return View();

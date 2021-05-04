@@ -295,8 +295,7 @@ namespace MySchool.Controllers
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var admin = _context.Admins.Where(c => c.IdentityUserId == userId).FirstOrDefault();
             var teacherUser = _context.Teachers.Find(id);
-            if (ModelState.IsValid)
-            {
+            
                 var senderEmail = new MailAddress(admin.Email);
                 var receiverEmail = new MailAddress(teacherUser.Email);
                 var password = admin.Password;
@@ -312,9 +311,9 @@ namespace MySchool.Controllers
                     Credentials = new NetworkCredential(senderEmail.Address, password)
                 };
                 using (var mess = new MailMessage(senderEmail, receiverEmail) { Subject = subject, Body = body }) { smtp.Send(mess); }
-                return View();
-            }
-            return View();
+                
+            
+            return View("Index");
         }
         public IActionResult EmailAllTeachers()
         {
@@ -522,6 +521,52 @@ namespace MySchool.Controllers
             }
 
             return View(form);
+        }
+
+        public async Task<IActionResult> MoveParent(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var parent = await _context.Parents.FindAsync(id);
+            if (parent == null)
+            {
+                return NotFound();
+            }
+            
+            return View(parent);
+        }
+
+        // POST: Parents/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult MoveParent(int id, [Bind("Id,FirstName,LastName,PreferredTitle,PhoneNumber,Email,Address,Classroom,IdentityUserId")] Parent model)
+        {
+            if (id != model.Id)
+            {
+                return NotFound();
+            }
+            var parent = _context.Parents.Find(id);
+            if (ModelState.IsValid)
+            {
+                parent.Address = model.Address;
+                parent.Email = model.Email;
+                parent.FirstName = model.FirstName;
+                parent.Id = model.Id;
+                parent.IdentityUserId = model.IdentityUserId;
+                parent.LastName = model.LastName;
+                parent.PhoneNumber = model.PhoneNumber;
+                parent.PreferredTitle = model.PreferredTitle;
+                _context.Update(parent);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            
+            return View(parent);
         }
 
         // POST: Admins/Delete/5

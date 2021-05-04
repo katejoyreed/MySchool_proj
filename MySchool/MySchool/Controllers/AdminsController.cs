@@ -137,7 +137,7 @@ namespace MySchool.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult CreatePermissionSlip(int id,[Bind("Id,Date,Location,Time,Classroom,StudentName,ApprovingParent")]PermissionSlip slip)
+        public async Task<IActionResult> CreatePermissionSlip(int id,[Bind("Id,Date,Location,Time,Classroom,StudentName,ApprovingParent")]PermissionSlip slip)
         {
             if (ModelState.IsValid)
             {
@@ -148,13 +148,13 @@ namespace MySchool.Controllers
                     slip.StudentName = student.StudentName;
                     slip.Classroom = classroom.ClassName;
                     _context.Add(slip);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 
 
 
             }
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
         public IActionResult ParentData(string classroom)
@@ -405,6 +405,15 @@ namespace MySchool.Controllers
             }
            // ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", admin.IdentityUserId);
             return View(admin);
+        }
+        public IActionResult ViewPosts(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var posts = _context.Posts.Where(x => x.ClassId == id);
+            return View(posts);
         }
 
         public async Task<IActionResult> EditStudent(int? id)

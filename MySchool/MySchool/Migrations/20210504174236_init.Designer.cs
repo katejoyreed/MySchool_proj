@@ -10,7 +10,7 @@ using MySchool.Data;
 namespace MySchool.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210430153234_init")]
+    [Migration("20210504174236_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -257,6 +257,9 @@ namespace MySchool.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

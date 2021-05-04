@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<MySchool.Models.Classroom>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Home";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,6 +10,19 @@
 <p>
     <a asp-action="CreateClassroom">Add New Classroom</a>
 </p>
+<br />
+<div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Quick Actions
+    <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+        <li><a asp-action="EmailAllParents">Email All Parents</a></li>
+        <li><a asp-action="EmailAllTeachers">Email All Teachers</a></li>
+        <li><a asp-action="ParentData">See Parents</a></li>
+        <li><a asp-action="TeacherData">See All Teachers</a></li>
+        <li><a asp-action="StudentData">SeeAllStudents</a></li>
+    </ul>
+</div>
+<br />
 <table class="table">
     <thead>
         <tr>
@@ -30,7 +43,7 @@
             <td>
                 <a asp-action="AddStudent" asp-route-id="@item.ClassId">Add Student</a> |
                 <a asp-action="SeeStudents" asp-route-id="@item.ClassId">See Students</a> |
-                <a asp-action="Delete" asp-route-id="@item.ClassId">Delete</a>
+                <a asp-action="CreatePermissionSlip" asp-route-id="@item.ClassId">Create Permission Slip</a>
             </td>
         </tr>
 }

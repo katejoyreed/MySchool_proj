@@ -134,7 +134,7 @@ namespace MySchool.Controllers
                 return NotFound();
             }
             var classroom = _context.Classrooms.Find(id);
-            return View(classroom);
+            return View();
         }
         [HttpPost]
         public IActionResult CreatePermissionSlip(int id,[Bind("Id,Date,Location,Time,Classroom,StudentName,ApprovingParent")]PermissionSlip slip)
@@ -148,10 +148,11 @@ namespace MySchool.Controllers
                     slip.StudentName = student.StudentName;
                     slip.Classroom = classroom.ClassName;
                     _context.Add(slip);
-                    _context.SaveChanges();
+                    
                 }
-                
-                
+                _context.SaveChanges();
+
+
             }
             return View("Index");
         }

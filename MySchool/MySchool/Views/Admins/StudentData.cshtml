@@ -1,0 +1,46 @@
+﻿@model IEnumerable<MySchool.Models.Student>
+
+@{
+    ViewData["Title"] = "StudentData";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Student Data</h1>
+
+<p>
+    @using (Html.BeginForm())
+    {
+        <select name="classroom" asp-items="@ViewBag.SearchTypes"></select>
+
+        <input type="submit" value="Search" />
+    }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Classroom)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Classroom)
+            </td>
+            <td>
+                <a asp-action="SeeEmergencyCard" asp-route-id="@item.StudentId">Emergency Card</a> 
+                
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

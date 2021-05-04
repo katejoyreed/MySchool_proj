@@ -127,17 +127,30 @@ namespace MySchool.Controllers
                 return View(emergencyCard);
         }
         //Get PermissionSlip
-        public IActionResult CreatePermissionSlip()
+        public IActionResult CreatePermissionSlip(int? id)
         {
-            return View();
+            if(id == null)
+            {
+                return NotFound();
+            }
+            var classroom = _context.Classrooms.Find(id);
+            return View(classroom);
         }
         [HttpPost]
-        public IActionResult CreatePermissionSlip([Bind("Id,Date,Location,Time,Classroom,StudentName,ApprovingParent")]PermissionSlip slip)
+        public IActionResult CreatePermissionSlip(int id,[Bind("Id,Date,Location,Time,Classroom,StudentName,ApprovingParent")]PermissionSlip slip)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(slip);
-                _context.SaveChanges();
+                var classroom = _context.Classrooms.Find(id);
+                var students = _context.Students.Where(x => x.Classroom == classroom.ClassName);
+                foreach(var student in students)
+                {
+                    slip.StudentName = student.StudentName;
+                    slip.Classroom = classroom.ClassName;
+                    _context.Add(slip);
+                    _context.SaveChanges();
+                }
+                
                 
             }
             return View("Index");

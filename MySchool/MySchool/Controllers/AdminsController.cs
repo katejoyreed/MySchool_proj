@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -212,6 +214,42 @@ namespace MySchool.Controllers
             {
                 return NotFound();
             }
+        }
+        public IActionResult SendThisParentEmail(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var parentUser = _context.Parents.Find(id);
+            return View(parentUser);
+        }
+        [HttpPost]
+        public IActionResult SendThisParentEmail(int id, string subject, string message)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var admin = _context.Admins.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            var parentUser = _context.Parents.Find(id);
+            if (ModelState.IsValid)
+            {
+                var senderEmail = new MailAddress(admin.Email);
+                var receiverEmail = new MailAddress(parentUser.Email);
+                var password = admin.Password;
+                var sub = subject;
+                var body = message;
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(senderEmail.Address, password)
+                };
+                using(var mess = new MailMessage(senderEmail, receiverEmail) { Subject = subject, Body = body }) { smtp.Send(mess); }
+                return View();
+            }
+            return View();
         }
 
         // GET: Admins/Edit/5

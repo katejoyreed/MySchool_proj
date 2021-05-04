@@ -97,7 +97,7 @@ namespace MySchool.Controllers
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
                 var classroom = _context.Classrooms.Where(x => x.ClassName == teacher.Classroom).FirstOrDefault();
-                post.Author = teacher.FirstName + teacher.LastName;
+                post.Author = teacher.FirstName + " " + teacher.LastName;
                 post.ClassId = classroom.ClassId;
                 post.Classroom = classroom;
                 _context.Add(post);

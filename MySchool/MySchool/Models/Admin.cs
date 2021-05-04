@@ -18,8 +18,10 @@ namespace MySchool.Models
 
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
-
+        [Display(Name = "School Email Address")]
         public string Email { get; set; }
+        [Display(Name = "School Email Password")]
+        public string Password { get; set; }
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }

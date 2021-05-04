@@ -160,17 +160,11 @@ namespace MySchool.Controllers
             return View("Index");
         }
 
-        public IActionResult Data(string cohort, string classroom)
+        public IActionResult ParentData(string classroom)
         {
-            List<string> cohorts = new List<string> { "Parents", "Teachers", "Students" };
             List<string> classrooms = _context.Classrooms.Select(x => x.ClassName).Distinct().ToList();
             classrooms.Insert(0, "All");
-            ViewBag.Cohorts = new SelectList(cohorts);
             ViewBag.SearchTypes = new SelectList(classrooms);
-            
-
-            if (cohort == "Parents")
-            {
                 if (classroom == "All")
                 {
                     var allParents = _context.Parents.ToList();
@@ -181,38 +175,37 @@ namespace MySchool.Controllers
                     var classParents = _context.Parents.Where(x => x.Classroom == classroom).ToList();
                     return View(classParents);
                 }
-            }
-            
-            else if (cohort == "Teachers")
+        }
+        public IActionResult TeacherData(string classroom)
+        {
+            List<string> classrooms = _context.Classrooms.Select(x => x.ClassName).Distinct().ToList();
+            classrooms.Insert(0, "All");
+            ViewBag.SearchTypes = new SelectList(classrooms);
+            if(classroom == "All")
             {
-                if (classroom == "All")
-                {
-                    var allTeachers = _context.Teachers.ToList();
-                    return View(allTeachers);
-                }
-                else 
-                {
-                    var classTeachers = _context.Teachers.Where(x => x.Classroom == classroom).ToList();
-                    return View(classTeachers);
-                }
-                
-            }
-            else if (cohort == "Students")
-            {
-                if (classroom == "All")
-                {
-                    var allStudents = _context.Students.ToList();
-                    return View(allStudents);
-                }
-                else 
-                {
-                    var classStudents = _context.Students.Where(x => x.Classroom == classroom);
-                    return View(classStudents);
-                }
+                var allTeachers = _context.Teachers.ToList();
+                return View(allTeachers);
             }
             else 
             {
-                return NotFound();
+                var classTeachers = _context.Teachers.Where(x => x.Classroom == classroom).Distinct().ToList();
+                return View(classTeachers);
+            }
+        }
+        public IActionResult StudentData(string classroom)
+        {
+            List<string> classrooms = _context.Classrooms.Select(x => x.ClassName).Distinct().ToList();
+            classrooms.Insert(0, "All");
+            ViewBag.SearchTypes = new SelectList(classrooms);
+            if (classroom == "All")
+            {
+                var allStudents = _context.Students.ToList();
+                return View(allStudents);
+            }
+            else
+            {
+                var classStudents = _context.Students.Where(x => x.Classroom == classroom).Distinct().ToList();
+                return View(classStudents);
             }
         }
         public IActionResult SendThisParentEmail(int? id)

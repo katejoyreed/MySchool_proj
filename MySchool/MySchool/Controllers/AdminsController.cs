@@ -283,7 +283,7 @@ namespace MySchool.Controllers
             return View();
         }
 
-        public IActionResult SendThisTeacherEmail(int? id)
+        public IActionResult EmailThisTeacher(int? id)
         {
             if (id == null)
             {
@@ -293,7 +293,7 @@ namespace MySchool.Controllers
             return View(teacherUser);
         }
         [HttpPost]
-        public IActionResult SendThisTeacherEmail(int id, string subject, string message)
+        public IActionResult EmailThisTeacher(int id, string subject, string message)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var admin = _context.Admins.Where(c => c.IdentityUserId == userId).FirstOrDefault();

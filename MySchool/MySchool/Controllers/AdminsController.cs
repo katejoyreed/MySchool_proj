@@ -415,7 +415,26 @@ namespace MySchool.Controllers
             var posts = _context.Posts.Where(x => x.ClassId == id);
             return View(posts);
         }
-
+        public IActionResult CreatePost(int? id)
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreatePost(int id, [Bind("PostId,Text,Author,ClassId,Classroom")] Post post)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var admin = _context.Admins.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+                var classroom = _context.Classrooms.Find(id);
+                post.Author = admin.FirstName + " " + admin.LastName;
+                post.ClassId = classroom.ClassId;
+                post.Classroom = classroom;
+                _context.Add(post);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("ViewPosts");
+        }
         public async Task<IActionResult> EditStudent(int? id)
         {
             if (id == null)

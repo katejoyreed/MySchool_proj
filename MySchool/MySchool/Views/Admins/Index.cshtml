@@ -45,7 +45,9 @@
             <td>
                 <a asp-action="AddStudent" asp-route-id="@item.ClassId">Add Student</a> |
                 <a asp-action="SeeStudents" asp-route-id="@item.ClassId">See Students</a> |
-                <a asp-action="CreatePermissionSlip" asp-route-id="@item.ClassId">Create Permission Slip</a>
+                <a asp-action="CreatePermissionSlip" asp-route-id="@item.ClassId">Create Permission Slip</a> |
+                <a asp-action="CreatePost" asp-route-id="@item.ClassId">Post in this Class</a> |
+                <a asp-action="ViewPosts" asp-route-id="@item.ClassId">View Classroom Posts</a> |
             </td>
         </tr>
 }

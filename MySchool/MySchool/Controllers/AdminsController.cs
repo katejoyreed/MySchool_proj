@@ -37,24 +37,7 @@ namespace MySchool.Controllers
             return View(classList);
         }
 
-        // GET: Admins/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var admin = await _context.Admins
-                .Include(a => a.IdentityUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (admin == null)
-            {
-                return NotFound();
-            }
-
-            return View(admin);
-        }
+        
 
         // GET: Admins/Create
         public IActionResult Create()
@@ -437,6 +420,34 @@ namespace MySchool.Controllers
         {
             var admin = await _context.Admins.FindAsync(id);
             _context.Admins.Remove(admin);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DeleteForm(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var form = await _context.PermissionSlips
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (form == null)
+            {
+                return NotFound();
+            }
+
+            return View(form);
+        }
+
+        // POST: Admins/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteForm(int id)
+        {
+            var form = await _context.PermissionSlips.FindAsync(id);
+            _context.PermissionSlips.Remove(form);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

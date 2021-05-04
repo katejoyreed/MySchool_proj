@@ -148,9 +148,9 @@ namespace MySchool.Controllers
                     slip.StudentName = student.StudentName;
                     slip.Classroom = classroom.ClassName;
                     _context.Add(slip);
-                    
+                    _context.SaveChanges();
                 }
-                _context.SaveChanges();
+                
 
 
             }
@@ -406,6 +406,47 @@ namespace MySchool.Controllers
             }
            // ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", admin.IdentityUserId);
             return View(admin);
+        }
+
+        public async Task<IActionResult> EditStudent(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var student = await _context.Students.FindAsync(id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+            
+            return View(student);
+        }
+
+        // POST: Admins/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditStudent(int id, [Bind("StudentId,StudentName,Classroom")] Student student)
+        {
+            if (id != student.StudentId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                
+                    _context.Update(student);
+                    await _context.SaveChangesAsync();
+                
+                
+                return RedirectToAction(nameof(Index));
+            }
+            // ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", admin.IdentityUserId);
+            return View(student);
         }
 
         // GET: Admins/Delete/5

@@ -137,24 +137,31 @@ namespace MySchool.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreatePermissionSlip(int id,[Bind("Id,Date,Location,Time,Classroom,StudentName,ApprovingParent")]PermissionSlip slip)
+        public IActionResult CreatePermissionSlip(int id,[Bind("Id,Date,Location,Time,Classroom,StudentName,ApprovingParent")]PermissionSlip slip)
         {
             if (ModelState.IsValid)
             {
                 var classroom = _context.Classrooms.Find(id);
                 var students = _context.Students.Where(x => x.Classroom == classroom.ClassName);
-                foreach(var student in students)
-                {
-                    slip.StudentName = student.StudentName;
-                    slip.Classroom = classroom.ClassName;
-                    _context.Add(slip);
-                    await _context.SaveChangesAsync();
-                }
                 
-
+                    foreach (var student in students)
+                    {
+                        slip.Id = 0;
+                        slip.StudentName = student.StudentName;
+                        slip.Classroom = classroom.ClassName;
+                        PermissionSlip permissionSlip = new PermissionSlip() { Id = slip.Id, Date = slip.Date, Location = slip.Location, Time = slip.Time, Classroom = slip.Classroom, StudentName = slip.StudentName, ApprovingParent = slip.ApprovingParent };
+                        _context.Add(permissionSlip);
+                    
+                    }
+                _context.SaveChanges();
 
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("ViewForms");
+        }
+        public IActionResult ViewForms()
+        {
+            var forms = _context.PermissionSlips.ToList();
+            return View(forms);
         }
 
         public IActionResult ParentData(string classroom)

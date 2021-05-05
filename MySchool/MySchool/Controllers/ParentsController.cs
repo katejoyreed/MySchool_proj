@@ -133,8 +133,16 @@ namespace MySchool.Controllers
         }
         public IActionResult UpdateEmergencyCard(int id, [Bind("Id,StudentName,ParentOneName,ParentOneContact,ParentTwoName,ParentTwoContact,ECOneName,ECOneNumber,ECTwoName,ECTwoNumber,DocName,Allergies,StudentId,Student")] EmergencyCard card)
         {
-            _context.Update(card);
-            _context.SaveChangesAsync();
+            if (id != card.Id)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                _context.Update(card);
+                _context.SaveChangesAsync();
+            }
+            
             return View(card);
         }
         

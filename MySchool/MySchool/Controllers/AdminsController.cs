@@ -147,7 +147,7 @@ namespace MySchool.Controllers
                     foreach (var student in students)
                     {
                         slip.Id = 0;
-                        slip.StudentName = student.StudentName;
+                        slip.StudentName = student.StudentFirstName + " " + student.StudentLastName;
                         slip.Classroom = classroom.ClassName;
                         PermissionSlip permissionSlip = new PermissionSlip() { Id = slip.Id, Date = slip.Date, Location = slip.Location, Time = slip.Time, Classroom = slip.Classroom, StudentName = slip.StudentName, ApprovingParent = slip.ApprovingParent };
                         _context.Add(permissionSlip);

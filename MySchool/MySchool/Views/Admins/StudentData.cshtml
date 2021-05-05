@@ -19,7 +19,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StudentName)
+                @Html.DisplayNameFor(model => model.StudentFirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentLastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DOB)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Classroom)
@@ -31,14 +37,20 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.StudentName)
+                @Html.DisplayFor(modelItem => item.StudentFirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentLastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DOB)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Classroom)
             </td>
             <td>
-                <a asp-action="SeeEmergencyCard" asp-route-id="@item.StudentId">Emergency Card</a> 
-                
+                <a asp-action="SeeEmergencyCard" asp-route-id="@item.StudentId">Emergency Card</a>
+
             </td>
         </tr>
 }

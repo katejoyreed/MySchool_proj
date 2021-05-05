@@ -67,17 +67,21 @@ namespace MySchool.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,PreferredTitle,PhoneNumber,Email,Address,IdentityUserId")] Parent parent)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,PreferredTitle,PhoneNumber,Email,Address,StudentFirstName,StudentLastName,DOB,IdentityUserId,StudentId")] Parent parent)
         {
             if (ModelState.IsValid)
             {
                 parent.IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var student = _context.Students.Where(x => x.DOB == parent.DOB && x.StudentFirstName == parent.StudentFirstName && x.StudentLastName == parent.StudentLastName).FirstOrDefault();
+                parent.Student = student;
+                parent.StudentId = student.StudentId;
+                parent.Classroom = student.Classroom;
                 _context.Add(parent);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            return View("Index");
+            return View("CreateEmergencyCard");
         }
         public IActionResult CreateEmergencyCard()
         {
@@ -89,11 +93,15 @@ namespace MySchool.Controllers
         {
             if (ModelState.IsValid)
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+                card.Student = parent.Student;
+                card.StudentId = parent.StudentId;
                 _context.Add(card);
-                _context.SaveChangesAsync();
-                return View("Index");
+                _context.SaveChanges();
+                return RedirectToAction("Index");
             }
-            return View("Index");
+            return RedirectToAction("Index");
         }
         //Get Permission Slip
         public IActionResult FillPermissionSlip(int? id)
@@ -114,15 +122,36 @@ namespace MySchool.Controllers
             permissionSlip.Location = slip.Location;
             permissionSlip.Time = slip.Time;
             permissionSlip.Classroom = slip.Classroom;
+            permissionSlip.StudentName = slip.StudentName;
             _context.Update(permissionSlip);
-            _context.SaveChangesAsync();
-            return View(permissionSlip);
+            _context.SaveChanges();
+            return View("ViewPendingForms");
         }
         public IActionResult ViewPermissionSlips()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
             var slips = _context.PermissionSlips.Where(x => x.Classroom == parent.Classroom).ToList();
+            
+            return View(slips);
+        }
+        public IActionResult ViewPendingForms()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            var slips = _context.PermissionSlips.Where(x => x.Classroom == parent.Classroom).ToList();
+            foreach (var slip in slips)
+            {
+                if (slip.ApprovingParent != null)
+                {
+                    slips.Remove(slip);
+                }
+            }
+            if(slips == null)
+            {
+                ViewBag.NoForms = "You have no pending forms at this time";
+                return View(ViewBag.NoForms);
+            }
             return View(slips);
         }
         //Get Emergency Card

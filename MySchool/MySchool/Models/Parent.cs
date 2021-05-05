@@ -31,10 +31,20 @@ namespace MySchool.Models
 
         public string Classroom { get; set; }
 
+        [Display(Name ="Student First Name")]
+        public string StudentFirstName { get; set; }
+        [Display(Name = "Student Last Name")]
+        public string StudentLastName { get; set; }
+        [Display(Name = "Student Date of Birth")]
+        public string DOB { get; set; }
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
+        
+        [ForeignKey("Student")]
+        public int StudentId { get; set; }
+        public Student Student { get; set; }
 
        
     }

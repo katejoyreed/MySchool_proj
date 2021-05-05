@@ -3,11 +3,24 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
+
 }
 
 <h1>Index</h1>
-
+<br />
+<div class="dropdown">
+    <button class="btn btn-outline-success dropdown-toggle" type="button" data-toggle="dropdown">
+        Quick Actions
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        <li><a asp-action="ViewPendingForms">See My Pending Forms</a></li>
+        <li><a asp-action="UpdateEmergencyCard">Update Emergency Card</a></li>
+        <li><a asp-action="Edit">Update My Information</a></li>
+        <li><a asp-action="Delete">Delete My Information</a></li>
+    </ul>
+</div>
+<br />
 
 
 <table class="table">

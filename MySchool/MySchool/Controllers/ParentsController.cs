@@ -79,6 +79,10 @@ namespace MySchool.Controllers
 
             return View("Index");
         }
+        public IActionResult CreateEmergencyCard()
+        {
+            return View();
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CreateEmergencyCard([Bind("Id,StudentName,ParentOneName,ParentOneContact,ParentTwoName,ParentTwoContact,ECOneName,ECOneNumber,ECTwoName,ECTwoNumber,DocName,Allergies,StudentId,Student")] EmergencyCard card)
@@ -140,7 +144,7 @@ namespace MySchool.Controllers
             if (ModelState.IsValid)
             {
                 _context.Update(card);
-                _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             
             return View(card);

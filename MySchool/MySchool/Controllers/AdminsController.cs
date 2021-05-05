@@ -435,6 +435,7 @@ namespace MySchool.Controllers
             }
             return RedirectToAction("ViewPosts");
         }
+
         public async Task<IActionResult> EditStudent(int? id)
         {
             if (id == null)

@@ -25,6 +25,7 @@ namespace MySchool.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<SchedulerEvent> SchedulerEvents { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Conference> Conferences { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

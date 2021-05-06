@@ -148,7 +148,21 @@ namespace MySchool.Controllers
                 _context.Add(availabileTime);
             }
             _context.SaveChanges();
-            return RedirectToAction("MyScheduledEvents");
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult MyEvents()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            var parents = _context.Parents.Where(x => x.Classroom == teacher.Classroom).ToList();
+            List<Conference> conferences = null;
+            foreach (var parent in parents)
+            {
+                var conference = _context.Conferences.Where(x => x.Parent == parent).FirstOrDefault();
+                conferences.Add(conference);
+            }
+            return View(conferences);
         }
 
         // GET: Teachers/Edit/5

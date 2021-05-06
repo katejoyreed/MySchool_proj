@@ -233,6 +233,7 @@ namespace MySchool.Controllers
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", parent.IdentityUserId);
             return View(parent);
         }
+        
 
         // GET: Parents/Delete/5
         public async Task<IActionResult> Delete(int? id)

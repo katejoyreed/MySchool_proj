@@ -5,17 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Comments</h1>
+<h1>ViewComments</h1>
+
+@foreach (var item in Model)
+{
+    <div class="boxed" border="black">
+        @Html.DisplayFor(modelItem => item.Author)<br /><br />
+        @Html.DisplayFor(modelItem => item.Text)<br /><br />
 
 
-
-@foreach (var item in Model) {
-
-<div class="boxed" border="black">
-    @Html.DisplayFor(modelItem => item.Author)<br /><br />
-    @Html.DisplayFor(modelItem => item.Text)<br /><br />
-    
-
-</div>
+    </div>
 }
-    

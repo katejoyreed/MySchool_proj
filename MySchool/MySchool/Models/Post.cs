@@ -16,8 +16,11 @@ namespace MySchool.Models
 
         public string Author { get; set; }
 
+        public List<Comment> ? Comments { get; set; }
+
         [ForeignKey("Classroom")]
         public int ClassId { get; set; }
         public Classroom Classroom { get; set; }
+
     }
 }

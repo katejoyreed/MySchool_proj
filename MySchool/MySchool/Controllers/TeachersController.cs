@@ -61,19 +61,29 @@ namespace MySchool.Controllers
         }
         public IActionResult CreateComment(int? id)
         {
-            var post = _context.Posts.Find(id);
+            var post = _context.Posts.Where(x => x.ClassId == id).FirstOrDefault();
             return View(post);
         }
         [HttpPost]
-        public IActionResult CreateComment(int id, [Bind("Id,Author,Text,PostId,Post")] Comment comment)
+        public IActionResult CreateComment(string text, int id, [Bind("PostId,Text,Author,Comments,ClassId,Classroom")] Post post)
         {
+            if(post.PostId != id)
+            {
+                return NotFound();
+            }
+            var postRep = _context.Posts.Where(x => x.PostId == id).FirstOrDefault();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
-            var post = _context.Posts.Where(x => x.PostId == id).FirstOrDefault();
-            comment.Author = teacher.FirstName + " " + teacher.LastName;
-            comment.PostId = post.PostId;
-            comment.Post = post;
-            _context.Add(post);
+            var comment = new Comment() { Author = teacher.FirstName + " " + teacher.LastName, Text = text, PostId = postRep.PostId, Post = postRep };
+            post.PostId = postRep.PostId;
+            post.Text = postRep.Text;
+            post.Author = postRep.Author;
+            post.ClassId = postRep.ClassId;
+            post.Classroom = postRep.Classroom;
+            _context.Add(comment);
+            _context.SaveChanges();
+            post.Comments.Add(comment);
+            _context.Update(post);
             _context.SaveChanges();
             return RedirectToAction("ViewComments");
 
@@ -113,7 +123,7 @@ namespace MySchool.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult CreatePost([Bind("PostId,Text,Author,ClassId,Classroom")] Post post)
+        public IActionResult CreatePost([Bind("PostId,Text,Author,Comments,ClassId,Classroom")] Post post)
         {
             if (ModelState.IsValid)
             {
@@ -123,6 +133,7 @@ namespace MySchool.Controllers
                 post.Author = teacher.FirstName + " " + teacher.LastName;
                 post.ClassId = classroom.ClassId;
                 post.Classroom = classroom;
+                post.Comments = null;
                 _context.Add(post);
                 _context.SaveChanges();
             }

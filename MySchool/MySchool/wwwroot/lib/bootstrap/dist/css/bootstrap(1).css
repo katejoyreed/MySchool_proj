@@ -75,6 +75,15 @@ body {
   outline: 0 !important;
 }
 
+.boxed {
+    margin: auto;
+    border: 2px solid pink;
+    height: auto;
+    width: 500px;
+    text-align: center;
+    color: gray;
+}
+
 hr {
   box-sizing: content-box;
   height: 0;

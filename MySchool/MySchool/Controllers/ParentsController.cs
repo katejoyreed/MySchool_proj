@@ -78,7 +78,7 @@ namespace MySchool.Controllers
                 parent.Classroom = student.Classroom;
                 _context.Add(parent);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+               
             }
 
             return View("CreateEmergencyCard");
@@ -113,7 +113,7 @@ namespace MySchool.Controllers
             var slip = _context.PermissionSlips.Find(id);
             return View(slip);
         }
-
+        [HttpPost]
         public IActionResult FillPermissionSlip(int id, [Bind("Id,Date,Location,Time,Classroom,StudentName,ApprovingParent")] PermissionSlip permissionSlip)
         {
             var slip = _context.PermissionSlips.Where(x => x.Id == id).FirstOrDefault();
@@ -164,6 +164,7 @@ namespace MySchool.Controllers
             var card = _context.EmergencyCards.Find(id);
             return View(card);
         }
+        [HttpPost]
         public IActionResult UpdateEmergencyCard(int id, [Bind("Id,StudentName,ParentOneName,ParentOneContact,ParentTwoName,ParentTwoContact,ECOneName,ECOneNumber,ECTwoName,ECTwoNumber,DocName,Allergies,StudentId,Student")] EmergencyCard card)
         {
             if (id != card.Id)

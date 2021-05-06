@@ -70,7 +70,7 @@ namespace MySchool.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddStudent(int id, [Bind("StudentId,StudentName,Classroom")] Student student)
+        public IActionResult AddStudent(int id, [Bind("StudentId,StudentFirstName,StudentLastName,DOB,Classroom")] Student student)
         {
             var classroom = _context.Classrooms.Where(x => x.ClassId == id).FirstOrDefault();
             if (ModelState.IsValid)

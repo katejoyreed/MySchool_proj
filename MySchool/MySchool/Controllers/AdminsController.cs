@@ -615,6 +615,30 @@ namespace MySchool.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public IActionResult CreateComment(int? id)
+        {
+            var post = _context.Posts.Find(id);
+            return View(post);
+        }
+        [HttpPost]
+        public IActionResult CreateComment(int id, [Bind("Id,Author,Text,PostId,Post")] Comment comment)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var admin = _context.Admins.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            var post = _context.Posts.Where(x => x.PostId == id).FirstOrDefault();
+            comment.Author = admin.FirstName + " " + admin.LastName;
+            comment.PostId = post.PostId;
+            comment.Post = post;
+            _context.Add(post);
+            _context.SaveChanges();
+            return RedirectToAction("ViewComments");
+
+        }
+        public IActionResult ViewComments(int id)
+        {
+            var comments = _context.Comments.Where(x => x.PostId == id);
+            return View(comments);
+        }
 
         private bool AdminExists(int id)
         {

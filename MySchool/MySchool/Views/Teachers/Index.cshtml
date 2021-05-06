@@ -14,11 +14,16 @@
 <p>
     <a asp-action="MyStudents">See My Students</a>
 </p>
+<p>
+    <a asp-action="SetAvailability">Set Availability for Conferences</a>
+</p>
 
 @foreach (var item in Model)
 {
-    <div class="boxed" border="black">
+<div class="boxed" border="black">
     @Html.DisplayFor(modelItem => item.Author)<br /><br />
     @Html.DisplayFor(modelItem => item.Text)<br /><br />
-    </div>
+    <a asp-action="CreateComment">Comment</a>
+    <a asp-action="ViewComments">View Comments</a>
+</div>
  }

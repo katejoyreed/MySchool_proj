@@ -102,10 +102,10 @@ namespace MySchool.Controllers
                 teacher.IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.Add(teacher);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
             }
 
-            return View("Index");
+            return RedirectToAction(nameof(Index));
         }
         //Get Post
         public IActionResult CreatePost()
@@ -127,6 +127,28 @@ namespace MySchool.Controllers
                 _context.SaveChanges();
             }
             return RedirectToAction("Index");
+        }
+
+        public IActionResult SetAvailability()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult SetAvailability([Bind("Id,Text,StartDate,EndDate,StudentId,Student")] SchedulerEvent schedulerEvent)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            var students = _context.Students.Where(x => x.Classroom == teacher.Classroom).ToList();
+            foreach (var  student in students)
+            {
+                schedulerEvent.Id = 0;
+                schedulerEvent.StudentId = student.StudentId;
+                schedulerEvent.Student = student;
+                SchedulerEvent availabileTime = new SchedulerEvent() { Id = schedulerEvent.Id, Text = schedulerEvent.Text, StartDate = schedulerEvent.StartDate, EndDate = schedulerEvent.StartDate, StudentId = schedulerEvent.StudentId, Student = schedulerEvent.Student };
+                _context.Add(availabileTime);
+            }
+            _context.SaveChanges();
+            return RedirectToAction("MyScheduledEvents");
         }
 
         // GET: Teachers/Edit/5

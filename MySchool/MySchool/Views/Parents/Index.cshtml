@@ -30,7 +30,7 @@
             @Html.DisplayFor(modelItem => item.Author)<br /><br />
             @Html.DisplayFor(modelItem => item.Text)<br /><br />
             <a asp-action="CreateComment" asp-route-id="@item.PostId">Comment</a> |
-            <a asp-action="ViewComments" asp-route-id="@item.PostId">View @Model.Count() Comments</a>
+            <a asp-action="ViewComments" asp-route-id="@item.PostId">View Comments</a>
             
         </div>
 

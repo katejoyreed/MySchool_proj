@@ -233,7 +233,31 @@ namespace MySchool.Controllers
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", parent.IdentityUserId);
             return View(parent);
         }
-        
+        //Get: Comment
+        public IActionResult CreateComment(int? id)
+        {
+            var post = _context.Posts.Find(id);
+            return View(post);
+        }
+        [HttpPost]
+        public IActionResult CreateComment(int id, [Bind("Id,Author,Text,PostId,Post")] Comment comment)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            var post = _context.Posts.Where(x => x.PostId == id).FirstOrDefault();
+            comment.Author = parent.FirstName + " " + parent.LastName;
+            comment.PostId = post.PostId;
+            comment.Post = post;
+            _context.Add(post);
+            _context.SaveChanges();
+            return RedirectToAction("ViewComments");
+            
+        }
+        public IActionResult ViewComments(int id)
+        {
+            var comments = _context.Comments.Where(x => x.PostId == id);
+            return View(comments);
+        }
 
         // GET: Parents/Delete/5
         public async Task<IActionResult> Delete(int? id)

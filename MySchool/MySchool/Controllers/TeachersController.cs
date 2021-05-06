@@ -59,7 +59,30 @@ namespace MySchool.Controllers
 
             return View(teacher);
         }
+        public IActionResult CreateComment(int? id)
+        {
+            var post = _context.Posts.Find(id);
+            return View(post);
+        }
+        [HttpPost]
+        public IActionResult CreateComment(int id, [Bind("Id,Author,Text,PostId,Post")] Comment comment)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            var post = _context.Posts.Where(x => x.PostId == id).FirstOrDefault();
+            comment.Author = teacher.FirstName + " " + teacher.LastName;
+            comment.PostId = post.PostId;
+            comment.Post = post;
+            _context.Add(post);
+            _context.SaveChanges();
+            return RedirectToAction("ViewComments");
 
+        }
+        public IActionResult ViewComments(int id)
+        {
+            var comments = _context.Comments.Where(x => x.PostId == id);
+            return View(comments);
+        }
         // GET: Teachers/Create
         public IActionResult Create()
         {

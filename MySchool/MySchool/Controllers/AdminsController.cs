@@ -437,6 +437,7 @@ namespace MySchool.Controllers
                 post.Author = admin.FirstName + " " + admin.LastName;
                 post.ClassId = classroom.ClassId;
                 post.Classroom = classroom;
+                post.Comments = new List<Comment>();
                 _context.Add(post);
                 _context.SaveChanges();
             }
@@ -617,21 +618,34 @@ namespace MySchool.Controllers
         }
         public IActionResult CreateComment(int? id)
         {
-            var post = _context.Posts.Find(id);
+            var post = _context.Posts.Where(x => x.ClassId == id).FirstOrDefault();
             return View(post);
         }
-        [HttpPost]
-        public IActionResult CreateComment(int id, [Bind("Id,Author,Text,PostId,Post")] Comment comment)
+        [HttpPut]
+        public IActionResult CreateComment(string text, int id, [Bind("PostId,Text,Author,Comments,ClassId,Classroom")] Post post)
         {
+            if (post.PostId != id)
+            {
+                return NotFound();
+            }
+            var postRep = _context.Posts.Where(x => x.PostId == id).FirstOrDefault();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var admin = _context.Admins.Where(c => c.IdentityUserId == userId).FirstOrDefault();
-            var post = _context.Posts.Where(x => x.PostId == id).FirstOrDefault();
-            comment.Author = admin.FirstName + " " + admin.LastName;
-            comment.PostId = post.PostId;
-            comment.Post = post;
-            _context.Add(post);
+
+            var comment = new Comment() { Id = 0, Author = admin.FirstName + " " + admin.LastName, Text = text, Post = postRep, PostId = postRep.PostId };
+
+
+            post.PostId = postRep.PostId;
+            post.Text = postRep.Text;
+            post.Author = postRep.Author;
+            post.ClassId = postRep.ClassId;
+            post.Classroom = postRep.Classroom;
+            _context.Add(comment);
             _context.SaveChanges();
-            return RedirectToAction("ViewComments");
+            post.Comments.Add(comment);
+            _context.Update(post);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
 
         }
         public IActionResult ViewComments(int id)

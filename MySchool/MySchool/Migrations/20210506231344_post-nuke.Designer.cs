@@ -10,15 +10,15 @@ using MySchool.Data;
 namespace MySchool.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210506161254_comment model added")]
-    partial class commentmodeladded
+    [Migration("20210506231344_post-nuke")]
+    partial class postnuke
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.4")
+                .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -307,6 +307,29 @@ namespace MySchool.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("MySchool.Models.Conference", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Conferences");
+                });
+
             modelBuilder.Entity("MySchool.Models.EmergencyCard", b =>
                 {
                     b.Property<int>("Id")
@@ -475,10 +498,15 @@ namespace MySchool.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("SchedulerEvents");
                 });
@@ -602,12 +630,23 @@ namespace MySchool.Migrations
             modelBuilder.Entity("MySchool.Models.Comment", b =>
                 {
                     b.HasOne("MySchool.Models.Post", "Post")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("MySchool.Models.Conference", b =>
+                {
+                    b.HasOne("MySchool.Models.Parent", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("MySchool.Models.EmergencyCard", b =>
@@ -649,6 +688,17 @@ namespace MySchool.Migrations
                     b.Navigation("Classroom");
                 });
 
+            modelBuilder.Entity("MySchool.Models.SchedulerEvent", b =>
+                {
+                    b.HasOne("MySchool.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("MySchool.Models.Teacher", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
@@ -656,6 +706,11 @@ namespace MySchool.Migrations
                         .HasForeignKey("IdentityUserId");
 
                     b.Navigation("IdentityUser");
+                });
+
+            modelBuilder.Entity("MySchool.Models.Post", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

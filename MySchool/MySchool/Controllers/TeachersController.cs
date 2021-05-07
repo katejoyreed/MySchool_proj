@@ -64,17 +64,20 @@ namespace MySchool.Controllers
             var post = _context.Posts.Where(x => x.ClassId == id).FirstOrDefault();
             return View(post);
         }
-        [HttpPost]
+        [HttpPut]
         public IActionResult CreateComment(string text, int id, [Bind("PostId,Text,Author,Comments,ClassId,Classroom")] Post post)
         {
-            if(post.PostId != id)
+            if (post.PostId != id)
             {
                 return NotFound();
             }
             var postRep = _context.Posts.Where(x => x.PostId == id).FirstOrDefault();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
-            var comment = new Comment() { Author = teacher.FirstName + " " + teacher.LastName, Text = text, PostId = postRep.PostId, Post = postRep };
+
+            var comment = new Comment() { Id = 0, Author = teacher.FirstName + " " + teacher.LastName, Text = text, Post = postRep, PostId = postRep.PostId };
+        
+
             post.PostId = postRep.PostId;
             post.Text = postRep.Text;
             post.Author = postRep.Author;
@@ -85,14 +88,10 @@ namespace MySchool.Controllers
             post.Comments.Add(comment);
             _context.Update(post);
             _context.SaveChanges();
-            return RedirectToAction("ViewComments");
+            return RedirectToAction("Index");
 
         }
-        public IActionResult ViewComments(int id)
-        {
-            var comments = _context.Comments.Where(x => x.PostId == id);
-            return View(comments);
-        }
+        
         // GET: Teachers/Create
         public IActionResult Create()
         {
@@ -133,7 +132,7 @@ namespace MySchool.Controllers
                 post.Author = teacher.FirstName + " " + teacher.LastName;
                 post.ClassId = classroom.ClassId;
                 post.Classroom = classroom;
-                post.Comments = null;
+                post.Comments = new List<Comment>();
                 _context.Add(post);
                 _context.SaveChanges();
             }

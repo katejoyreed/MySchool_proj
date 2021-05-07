@@ -36,7 +36,7 @@
     <div class="boxed" border="black">
         @Html.DisplayFor(modelItem => item.Author)<br /><br />
         @Html.DisplayFor(modelItem => item.Text)<br /><br />
-        <a asp-action="Comment" asp-route-id="@item.PostId">Comment</a>
+        <a asp-action="CreateComment" asp-route-id="@item.PostId">Comment</a>
 
     </div>
     @if (item.Comments != null)

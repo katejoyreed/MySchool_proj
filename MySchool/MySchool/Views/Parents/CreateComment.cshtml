@@ -1,4 +1,4 @@
-﻿@model MySchool.Models.Comment
+﻿@model MySchool.Models.Post
 
 @{
     ViewData["Title"] = "CreateComment";
@@ -7,21 +7,29 @@
 
 <h1>CreateComment</h1>
 
-<h4>Comment</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreateComment">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+            <input type="hidden" asp-for="PostId" />
+            @if (Model.Comments == null)
+            {
+                Model.Comments = new List<Comment>();
+                var comment = new Comment() { Id = 1, Author = "anon", Text = "anon", Post = Model, PostId = Model.PostId };
+                Model.Comments.Add(comment);
+
+            }
+            @{var id = Model.Comments.Count(); }
             <div class="form-group">
-                <label asp-for="Text" class="control-label"></label>
-                <input asp-for="Text" class="form-control" />
-                <span asp-validation-for="Text" class="text-danger"></span>
+                <label asp-for="Comments[id].Text" class="control-label"></label>
+                <input asp-for="Comments[id].Text" class="form-control" />
+                <span asp-validation-for="Comments[id].Text" class="text-danger"></span>
             </div>
-            
+
+
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -30,7 +38,6 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

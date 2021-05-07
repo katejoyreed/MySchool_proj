@@ -1,0 +1,49 @@
+﻿@model IEnumerable<MySchool.Models.SchedulerEvent>
+
+@{
+    ViewData["Title"] = "ViewTeacherAvailability";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>ViewTeacherAvailability</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Text)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Text)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            
+            <td>
+                <a asp-action="ScheduleConference" asp-route-id="@item.Id">Schedule Conference</a> 
+                
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

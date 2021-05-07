@@ -154,6 +154,39 @@ namespace MySchool.Controllers
             }
             return View(slips);
         }
+        public IActionResult ViewTeacherAvailability()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            var availability = _context.SchedulerEvents.Where(x => x.StudentId == parent.StudentId).FirstOrDefault();
+            return View(availability);
+            
+        }
+        public IActionResult ScheduleConference()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ScheduleConference([Bind("Id,Date,Text,ParentId,Parent")] Conference conference)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            conference.ParentId = parent.Id;
+            conference.Parent = parent;
+            conference.Text = "Conference with" + parent.FirstName + " " + parent.LastName;
+            var alreadyScheduled = _context.Conferences.ToList();
+            foreach (var sch in alreadyScheduled)
+            {
+                if(conference.Date == sch.Date)
+                {
+                    ViewBag.Msg = "This time has already been scheduled, please select another option";
+                    return View(ViewBag.Msg);
+                }
+            }
+            _context.Add(conference);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
         //Get Emergency Card
         public IActionResult UpdateEmergencyCard(int? id)
         {

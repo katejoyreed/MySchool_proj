@@ -10,7 +10,7 @@ using MySchool.Data;
 namespace MySchool.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210506231344_post-nuke")]
+    [Migration("20210507113902_post nuke")]
     partial class postnuke
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -451,10 +451,10 @@ namespace MySchool.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StudentName")
+                    b.Property<string>("StudentFirst")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Time")
+                    b.Property<string>("StudentLast")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

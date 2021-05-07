@@ -114,15 +114,15 @@ namespace MySchool.Controllers
             return View(slip);
         }
         [HttpPost]
-        public IActionResult FillPermissionSlip(int id, [Bind("Id,Date,Location,Time,Classroom,StudentName,ApprovingParent")] PermissionSlip permissionSlip)
+        public IActionResult FillPermissionSlip(int id, [Bind("Id,Date,Location,Classroom,StudentFirst,StudentLast,ApprovingParent")] PermissionSlip permissionSlip)
         {
             var slip = _context.PermissionSlips.Where(x => x.Id == id).FirstOrDefault();
             permissionSlip.Id = slip.Id;
             permissionSlip.Date = slip.Date;
             permissionSlip.Location = slip.Location;
-            permissionSlip.Time = slip.Time;
             permissionSlip.Classroom = slip.Classroom;
-            permissionSlip.StudentName = slip.StudentName;
+            permissionSlip.StudentFirst = slip.StudentFirst;
+            permissionSlip.StudentLast = slip.StudentLast;
             _context.Update(permissionSlip);
             _context.SaveChanges();
             return View("ViewPendingForms");
@@ -186,6 +186,14 @@ namespace MySchool.Controllers
             _context.Add(conference);
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+        public IActionResult ViewEmergencyCard()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            var student = parent.Student;
+            var emergencyCard = _context.EmergencyCards.Where(x => x.StudentId == student.StudentId);
+            return View(emergencyCard);
         }
         //Get Emergency Card
         public IActionResult UpdateEmergencyCard(int? id)

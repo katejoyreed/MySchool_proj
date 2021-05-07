@@ -137,7 +137,7 @@ namespace MySchool.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult CreatePermissionSlip(int id,[Bind("Id,Date,Location,Time,Classroom,StudentName,ApprovingParent")]PermissionSlip slip)
+        public IActionResult CreatePermissionSlip(int id,[Bind("Id,Date,Location,Classroom,ApprovingParent,StudentFirst,StudentLast")]PermissionSlip slip)
         {
             if (ModelState.IsValid)
             {
@@ -147,9 +147,10 @@ namespace MySchool.Controllers
                     foreach (var student in students)
                     {
                         slip.Id = 0;
-                        slip.StudentName = student.StudentFirstName + " " + student.StudentLastName;
+                        slip.StudentFirst = student.StudentFirstName;
+                        slip.StudentLast = student.StudentLastName;
                         slip.Classroom = classroom.ClassName;
-                        PermissionSlip permissionSlip = new PermissionSlip() { Id = slip.Id, Date = slip.Date, Location = slip.Location, Time = slip.Time, Classroom = slip.Classroom, StudentName = slip.StudentName, ApprovingParent = slip.ApprovingParent };
+                        PermissionSlip permissionSlip = new PermissionSlip() { Id = slip.Id, Date = slip.Date, Location = slip.Location, Classroom = slip.Classroom, StudentFirst = slip.StudentFirst, StudentLast = slip.StudentLast, ApprovingParent = slip.ApprovingParent };
                         _context.Add(permissionSlip);
                     
                     }

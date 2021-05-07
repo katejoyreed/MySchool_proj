@@ -449,10 +449,10 @@ namespace MySchool.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StudentName")
+                    b.Property<string>("StudentFirst")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Time")
+                    b.Property<string>("StudentLast")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

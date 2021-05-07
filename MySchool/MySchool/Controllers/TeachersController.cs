@@ -91,6 +91,35 @@ namespace MySchool.Controllers
             return RedirectToAction("Index");
 
         }
+        public IActionResult ViewPermissionSlips()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            var myStudents = _context.Students.Where(x => x.Classroom == teacher.Classroom);
+            List<PermissionSlip> slips = null;
+            foreach (var student in myStudents)
+            {
+                var slip = _context.PermissionSlips.Where(x => x.StudentFirst == student.StudentFirstName && x.StudentLast == student.StudentLastName).FirstOrDefault();
+                if(slip.ApprovingParent != null)
+                {
+                    slips.Add(slip);
+                }
+            }
+            return View(slips);
+        }
+        public IActionResult MyConferences()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            var myParents = _context.Parents.Where(x => x.Classroom == teacher.Classroom).ToList();
+            List<Conference> conferences = null;
+            foreach(var parent in myParents)
+            {
+                var conference = _context.Conferences.Where(x => x.Parent == parent).FirstOrDefault();
+                conferences.Add(conference);
+            }
+            return View(conferences);
+        }
         
         // GET: Teachers/Create
         public IActionResult Create()

@@ -67,9 +67,9 @@ namespace MySchool.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Time = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Classroom = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StudentName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StudentFirst = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StudentLast = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ApprovingParent = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>

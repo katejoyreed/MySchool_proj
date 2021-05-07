@@ -1,0 +1,99 @@
+﻿@model IEnumerable<MySchool.Models.EmergencyCard>
+
+@{
+    ViewData["Title"] = "ViewEmergencyCard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Emergency Card</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ParentOneName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ParentOneContact)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ParentTwoName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ParentTwoContact)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ECOneName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ECOneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ECTwoName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ECTwoNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DocName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Allergies)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Student)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParentOneName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParentOneContact)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParentTwoName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParentTwoContact)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ECOneName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ECOneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ECTwoName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ECTwoNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Allergies)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.StudentId)
+            </td>
+            <td>
+                <a asp-action="UpdateEmergencyCard" asp-route-id="@item.Id">Update</a>
+               
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

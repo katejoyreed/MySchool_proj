@@ -5,11 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>ViewPermissionSlips</h1>
+<h1>Completed Permission Slips</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
@@ -23,9 +21,14 @@
             <th>
                 @Html.DisplayNameFor(model => model.Classroom)
             </th>
-           
             <th>
                 @Html.DisplayNameFor(model => model.ApprovingParent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentFirst)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentLast)
             </th>
             <th></th>
         </tr>
@@ -39,19 +42,19 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Location)
             </td>
-           
             <td>
                 @Html.DisplayFor(modelItem => item.Classroom)
             </td>
-          
             <td>
                 @Html.DisplayFor(modelItem => item.ApprovingParent)
             </td>
             <td>
-                <a asp-action="FillPermissionSlip" asp-route-id="@item.Id">Fill out this form</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                
+                @Html.DisplayFor(modelItem => item.StudentFirst)
             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentLast)
+            </td>
+
         </tr>
 }
     </tbody>

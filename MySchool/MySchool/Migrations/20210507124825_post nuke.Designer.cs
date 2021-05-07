@@ -10,7 +10,7 @@ using MySchool.Data;
 namespace MySchool.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210507113902_post nuke")]
+    [Migration("20210507124825_post nuke")]
     partial class postnuke
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

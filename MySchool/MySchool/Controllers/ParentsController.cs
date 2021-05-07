@@ -117,7 +117,7 @@ namespace MySchool.Controllers
         public IActionResult FillPermissionSlip(int id, [Bind("Id,Date,Location,Classroom,StudentFirst,StudentLast,ApprovingParent")] PermissionSlip permissionSlip)
         {
             var slip = _context.PermissionSlips.Where(x => x.Id == id).FirstOrDefault();
-            permissionSlip.Id = slip.Id;
+            
             permissionSlip.Date = slip.Date;
             permissionSlip.Location = slip.Location;
             permissionSlip.Classroom = slip.Classroom;
@@ -158,7 +158,7 @@ namespace MySchool.Controllers
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
-            var availability = _context.SchedulerEvents.Where(x => x.StudentId == parent.StudentId).FirstOrDefault();
+            var availability = _context.SchedulerEvents.Where(x => x.StudentId == parent.StudentId);
             return View(availability);
             
         }
@@ -174,15 +174,7 @@ namespace MySchool.Controllers
             conference.ParentId = parent.Id;
             conference.Parent = parent;
             conference.Text = "Conference with" + parent.FirstName + " " + parent.LastName;
-            var alreadyScheduled = _context.Conferences.ToList();
-            foreach (var sch in alreadyScheduled)
-            {
-                if(conference.Date == sch.Date)
-                {
-                    ViewBag.Msg = "This time has already been scheduled, please select another option";
-                    return View(ViewBag.Msg);
-                }
-            }
+            conference.Id = 0;
             _context.Add(conference);
             _context.SaveChanges();
             return RedirectToAction("Index");
@@ -191,8 +183,8 @@ namespace MySchool.Controllers
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
-            var student = parent.Student;
-            var emergencyCard = _context.EmergencyCards.Where(x => x.StudentId == student.StudentId);
+            var studentId = parent.StudentId;
+            var emergencyCard = _context.EmergencyCards.Where(x => x.StudentId == studentId);
             return View(emergencyCard);
         }
         //Get Emergency Card
@@ -214,11 +206,14 @@ namespace MySchool.Controllers
             }
             if (ModelState.IsValid)
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+                card.StudentId = parent.StudentId;
                 _context.Update(card);
                 _context.SaveChanges();
             }
             
-            return View(card);
+            return RedirectToAction("ViewEmergencyCard");
         }
         
 

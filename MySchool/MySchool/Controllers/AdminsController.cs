@@ -123,7 +123,7 @@ namespace MySchool.Controllers
                 return NotFound();
             }
 
-            var emergencyCard = _context.EmergencyCards.Where(x => x.StudentId == id);
+            var emergencyCard = _context.EmergencyCards.Where(x => x.StudentId == id).FirstOrDefault();
                 return View(emergencyCard);
         }
         //Get PermissionSlip
@@ -442,7 +442,7 @@ namespace MySchool.Controllers
                 _context.Add(post);
                 _context.SaveChanges();
             }
-            return RedirectToAction("ViewPosts");
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> EditStudent(int? id)

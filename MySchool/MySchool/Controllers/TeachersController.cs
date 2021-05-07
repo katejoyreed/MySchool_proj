@@ -38,8 +38,14 @@ namespace MySchool.Controllers
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
-            var myStudents = _context.Students.Where(x => x.Classroom == teacher.Classroom);
+            var myStudents = _context.Students.Where(x => x.Classroom == teacher.Classroom).ToList();
             return View(myStudents);
+        }
+        public IActionResult ViewEmergencyCard(int id)
+        {
+
+            var card = _context.EmergencyCards.Where(x => x.StudentId == id).FirstOrDefault();
+            return View(card);
         }
         // GET: Teachers/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -112,10 +118,10 @@ namespace MySchool.Controllers
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
             var myParents = _context.Parents.Where(x => x.Classroom == teacher.Classroom).ToList();
-            List<Conference> conferences = null;
+            List<Conference> conferences = new List<Conference>();
             foreach(var parent in myParents)
             {
-                var conference = _context.Conferences.Where(x => x.Parent == parent).FirstOrDefault();
+                var conference = _context.Conferences.Where(x => x.ParentId == parent.Id).FirstOrDefault();
                 conferences.Add(conference);
             }
             return View(conferences);

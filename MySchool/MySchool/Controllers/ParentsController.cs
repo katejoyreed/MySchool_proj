@@ -110,19 +110,22 @@ namespace MySchool.Controllers
             {
                 return NotFound();
             }
-            var slip = _context.PermissionSlips.Find(id);
+            var slip = _context.PermissionSlips.Where(x => x.Id == id).FirstOrDefault();
             return View(slip);
         }
         [HttpPost]
         public IActionResult FillPermissionSlip(int id, [Bind("Id,Date,Location,Classroom,StudentFirst,StudentLast,ApprovingParent")] PermissionSlip permissionSlip)
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
             var slip = _context.PermissionSlips.Where(x => x.Id == id).FirstOrDefault();
-            
+            permissionSlip.Id = slip.Id;
             permissionSlip.Date = slip.Date;
             permissionSlip.Location = slip.Location;
             permissionSlip.Classroom = slip.Classroom;
             permissionSlip.StudentFirst = slip.StudentFirst;
             permissionSlip.StudentLast = slip.StudentLast;
+            permissionSlip.ApprovingParent = parent.FirstName + parent.LastName;
             _context.Update(permissionSlip);
             _context.SaveChanges();
             return View("ViewPendingForms");

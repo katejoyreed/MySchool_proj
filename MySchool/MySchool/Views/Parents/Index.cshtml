@@ -16,9 +16,9 @@
     <ul class="dropdown-menu">
         <li><a asp-action="ViewPendingForms">See My Pending Forms</a></li>
         <li><a asp-action="ViewEmergencyCard">Emergency Card</a></li>
-        <li><a asp-action="ViewTeacherAvailability">See When Your Child's Teacher Is Available for a Conference</a></li>
+        <li><a asp-action="ViewTeacherAvailability">See When Teacher Is Available for a Conference</a></li>
         <li><a asp-action="Edit">Update My Information</a></li>
-        <li><a asp-action="Delete">Delete My Information</a></li>
+        
     </ul>
 </div>
 <br />
@@ -27,6 +27,7 @@
 
     @foreach (var item in Model)
     {
+        <br />
         <div class="boxed" border="black">
             @Html.DisplayFor(modelItem => item.Author)<br /><br />
             @Html.DisplayFor(modelItem => item.Text)<br /><br />
@@ -34,5 +35,6 @@
             <a asp-action="ViewComments" asp-route-id="@item.PostId">View Comments</a>
             
         </div>
+        <br />
 
     }

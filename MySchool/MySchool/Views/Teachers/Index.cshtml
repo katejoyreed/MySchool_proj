@@ -34,23 +34,13 @@
 
 @foreach (var item in Model)
 {
+    <br />
     <div class="boxed" border="black">
         @Html.DisplayFor(modelItem => item.Author)<br /><br />
         @Html.DisplayFor(modelItem => item.Text)<br /><br />
         <a asp-action="CreateComment" asp-route-id="@item.PostId">Comment</a>
 
     </div>
-    @if (item.Comments != null)
-    {
-        @foreach (var comment in item.Comments)
-        {
-            <div class="box-shadow" border="black">
-                @Html.DisplayFor(modelItem => comment.Author)<br /><br />
-                @Html.DisplayFor(modelItem => comment.Text)<br /><br />
-
-
-            </div>
-        }
-    }
+    <br />
 
 }

@@ -114,27 +114,24 @@ namespace MySchool.Controllers
             return View(slip);
         }
         [HttpPost]
-        public IActionResult FillPermissionSlip(int id, [Bind("Id,Date,Location,Classroom,StudentFirst,StudentLast,ApprovingParent")] PermissionSlip permissionSlip)
+        public IActionResult FillPermissionSlip([Bind("Id,Date,Location,Classroom,StudentFirst,StudentLast,ApprovingParent")] PermissionSlip model)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
-            var slip = _context.PermissionSlips.Where(x => x.Id == id).FirstOrDefault();
-            permissionSlip.Id = slip.Id;
-            permissionSlip.Date = slip.Date;
-            permissionSlip.Location = slip.Location;
-            permissionSlip.Classroom = slip.Classroom;
-            permissionSlip.StudentFirst = slip.StudentFirst;
-            permissionSlip.StudentLast = slip.StudentLast;
-            permissionSlip.ApprovingParent = parent.FirstName + parent.LastName;
-            _context.Update(permissionSlip);
+            
+            
+            
+            model.ApprovingParent = parent.FirstName + " " + parent.LastName;
+            _context.Update(model);
             _context.SaveChanges();
-            return View("ViewPendingForms");
+            
+            return RedirectToAction("ViewPermissionSlips");
         }
         public IActionResult ViewPermissionSlips()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
-            var slips = _context.PermissionSlips.Where(x => x.Classroom == parent.Classroom).ToList();
+            var slips = _context.PermissionSlips.Where(x => x.ApprovingParent == parent.FirstName + " " + parent.LastName).ToList();
             
             return View(slips);
         }

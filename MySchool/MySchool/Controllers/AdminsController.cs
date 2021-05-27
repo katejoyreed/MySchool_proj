@@ -588,7 +588,7 @@ namespace MySchool.Controllers
             {
                 return NotFound();
             }
-            var parent = _context.Parents.Find(id);
+            var parent = _context.Parents.Where(x => x.Id == id).FirstOrDefault();
             if (ModelState.IsValid)
             {
                 parent.Address = model.Address;

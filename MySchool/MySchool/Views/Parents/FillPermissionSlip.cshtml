@@ -16,22 +16,25 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
-                @Html.DisplayNameFor(model => model.Date)
-                
+                @Html.DisplayFor(model => model.Date)
+
             </div>
             <div class="form-group">
                 <label asp-for="Location" class="control-label"></label>
-                @Html.DisplayNameFor(model => model.Location)
-               
+                @Html.DisplayFor(model => model.Location)
+
             </div>
-            
+
             <div class="form-group">
                 <label asp-for="Classroom" class="control-label"></label>
-                @Html.DisplayNameFor(model => model.Classroom)
-               
+                @Html.DisplayFor(model => model.Classroom)
+
             </div>
-            
-            
+            <input type="hidden" asp-for="StudentFirst" />
+            <input type="hidden" asp-for="StudentLast" />
+            <input type="hidden" asp-for="ApprovingParent" />
+
+
             <div class="form-group">
                 <input type="submit" value="Approve" class="btn btn-primary" />
             </div>
@@ -40,7 +43,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Home</a>
 </div>
 
 @section Scripts {

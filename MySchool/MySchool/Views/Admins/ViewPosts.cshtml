@@ -12,11 +12,12 @@
 </p>
 
 @foreach (var item in Model)
-{
+{<br />
 <div class="boxed" border="black">
     @Html.DisplayFor(modelItem => item.Author)<br /><br />
     @Html.DisplayFor(modelItem => item.Text)<br /><br />
     <a asp-action="CreateComment">Comment</a>
     <a asp-action="ViewComments">View Comments</a>
 </div>
+<br />
 }

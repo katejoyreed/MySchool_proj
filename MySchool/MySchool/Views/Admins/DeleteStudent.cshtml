@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>DeleteStudent</h1>
+<h1>Delete Student</h1>
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
@@ -41,6 +41,6 @@
     <form asp-action="DeleteStudent">
         <input type="hidden" asp-for="StudentId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index">Home</a>
     </form>
 </div>
